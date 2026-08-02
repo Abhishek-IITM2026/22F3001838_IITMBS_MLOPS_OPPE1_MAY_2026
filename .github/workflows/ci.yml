@@ -29,6 +29,14 @@ jobs:
         pip install feast==0.65.0
         pip install gcsfs==2025.5.1 pyarrow==19.0.1 matplotlib==3.10.3 pytest==8.4.1
         pip install pathspec==0.12.1
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
         
     - name: Install CML
       run: |
