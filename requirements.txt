@@ -1,0 +1,13 @@
+pandas
+numpy
+scikit-learn
+dvc
+dvc-gs
+mlflow
+feast
+gcsfs
+pyarrow
+matplotlib
+pytest
+joblib
+cml
