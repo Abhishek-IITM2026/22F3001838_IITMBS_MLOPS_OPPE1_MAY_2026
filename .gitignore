@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 mlruns/
 data/processed/
+feature_repo/feature_repo/data
+# Feast databases
+*.db
