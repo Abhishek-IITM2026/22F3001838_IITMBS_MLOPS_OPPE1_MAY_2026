@@ -4,7 +4,7 @@ import pandas as pd
 store = FeatureStore(repo_path="feature_repo/feature_repo")
 
 entity_df = pd.read_parquet(
-    "feature_repo/feature_repo/data/train_all.parquet"
+    "data/train_all.parquet"
 )[["stock_name", "timestamp"]]
 
 training_df = store.get_historical_features(
