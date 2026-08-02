@@ -75,15 +75,15 @@ jobs:
       - name: MLflow Training
         run: python mlflow_train.py
 
+      - name: Generate Feast Features
+        run: |
+          python get_features.py
+
       - name: Evaluate Model
         run: python evaluate.py
 
       - name: Run Tests
         run: pytest
-
-      - name: Generate Feast Features
-        run: |
-          python get_features.py
 
       - name: Generate Report
         run: python report.py
