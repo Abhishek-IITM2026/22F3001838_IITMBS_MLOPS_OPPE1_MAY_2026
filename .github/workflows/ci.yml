@@ -81,6 +81,10 @@ jobs:
       - name: Run Tests
         run: pytest
 
+      - name: Generate Feast Features
+        run: |
+          python get_features.py
+
       - name: Generate Report
         run: python report.py
 
