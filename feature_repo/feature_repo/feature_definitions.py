@@ -18,7 +18,7 @@ stock = Entity(
 # Offline source
 stock_source = FileSource(
     name="stock_source",
-    path="data/train_all.parquet",
+    path="data/train_small.parquet",
     timestamp_field="timestamp",
 )
 

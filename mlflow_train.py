@@ -1,36 +1,48 @@
 import os
 import joblib
+import pandas as pd
+
 import mlflow
 import mlflow.sklearn
 
-import pandas as pd
-
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+)
 
-# ----------------------------
-# MLflow setup
-# ----------------------------
+# ---------------------------------------
+# MLflow Setup
+# ---------------------------------------
+
+mlflow.set_tracking_uri("sqlite:///mlflow.db")
 mlflow.set_experiment("StockPrediction")
 
 os.makedirs("models", exist_ok=True)
 
+# ---------------------------------------
+# Load Data
+# ---------------------------------------
+
 train = pd.read_csv("data/processed/train_all.csv")
 test = pd.read_csv("data/processed/test_all.csv")
 
+# Use a subset for faster execution
 train = train.sample(
     n=min(5000, len(train)),
-    random_state=42
+    random_state=42,
 )
 
 test = test.sample(
     n=min(1000, len(test)),
-    random_state=42
-    )
+    random_state=42,
+)
 
 FEATURES = [
     "rolling_avg_10",
-    "volume_sum_10"
+    "volume_sum_10",
 ]
 
 TARGET = "target"
@@ -45,6 +57,10 @@ best_accuracy = -1
 best_model = None
 best_run_id = None
 
+# ---------------------------------------
+# Hyperparameter Tuning
+# ---------------------------------------
+
 for n_estimators in [50, 100, 200]:
 
     for max_depth in [5, 10, None]:
@@ -54,50 +70,65 @@ for n_estimators in [50, 100, 200]:
             model = RandomForestClassifier(
                 n_estimators=n_estimators,
                 max_depth=max_depth,
-                random_state=42
+                random_state=42,
             )
 
             model.fit(X_train, y_train)
 
             preds = model.predict(X_test)
 
-            acc = accuracy_score(y_test, preds)
-            prec = precision_score(y_test, preds)
-            rec = recall_score(y_test, preds)
+            accuracy = accuracy_score(y_test, preds)
+            precision = precision_score(y_test, preds)
+            recall = recall_score(y_test, preds)
             f1 = f1_score(y_test, preds)
 
+            # Log parameters
             mlflow.log_param("n_estimators", n_estimators)
             mlflow.log_param("max_depth", max_depth)
 
-            mlflow.log_metric("accuracy", acc)
-            mlflow.log_metric("precision", prec)
-            mlflow.log_metric("recall", rec)
+            # Log metrics
+            mlflow.log_metric("accuracy", accuracy)
+            mlflow.log_metric("precision", precision)
+            mlflow.log_metric("recall", recall)
             mlflow.log_metric("f1_score", f1)
 
+            # Log model
             mlflow.sklearn.log_model(
                 model,
-                artifact_path="model"
+                artifact_path="model",
             )
 
-            if acc > best_accuracy:
-                best_accuracy = acc
+            print(
+                f"n_estimators={n_estimators}, "
+                f"max_depth={max_depth}, "
+                f"accuracy={accuracy:.4f}"
+            )
+
+            if accuracy > best_accuracy:
+                best_accuracy = accuracy
                 best_model = model
                 best_run_id = mlflow.active_run().info.run_id
 
+# ---------------------------------------
+# Save Best Model
+# ---------------------------------------
+
 joblib.dump(best_model, "models/best_model.joblib")
 
-print("Best Accuracy:", best_accuracy)
-print("Best Run:", best_run_id)
+print("\nBest Accuracy:", best_accuracy)
+print("Best Run ID :", best_run_id)
 
-# ----------------------------
+# ---------------------------------------
 # Register Best Model
-# ----------------------------
+# ---------------------------------------
 
 model_uri = f"runs:/{best_run_id}/model"
 
-registered = mlflow.register_model(
+registered_model = mlflow.register_model(
     model_uri=model_uri,
-    name="StockPredictionModel"
+    name="StockPredictionModel",
 )
 
-print("Registered Model Version:", registered.version)
+print(
+    f"Registered Model Version: {registered_model.version}"
+)
