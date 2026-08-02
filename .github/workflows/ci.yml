@@ -34,11 +34,19 @@ jobs:
           python -m pip install --upgrade pip
 
           pip install pandas==2.2.3 numpy==2.2.6 scikit-learn==1.6.1 joblib==1.5.1
+
           pip install dvc==3.58.0 dvc-gs==3.0.1
-          pip install mlflow==2.22.1 mlflow-skinny==2.22.1 mlflow-tracing==3.14.0
+
+          pip install mlflow==2.22.2
+
           pip install feast==0.65.0
-          pip install gcsfs==2025.5.1 pyarrow==19.0.1 matplotlib==3.10.3 pytest==8.4.1
+          pip install gcsfs==2025.5.1
+          pip install pyarrow==19.0.1
+          pip install matplotlib==3.10.3
+          pip install pytest==8.4.1
           pip install pathspec==0.12.1
+
+          python -c "import mlflow; print('MLflow Version:', mlflow.__version__)"
 
       - name: Install CML
         run: npm install -g @dvcorg/cml
