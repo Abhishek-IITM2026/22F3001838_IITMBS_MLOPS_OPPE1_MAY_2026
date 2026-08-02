@@ -1,31 +1,18 @@
-pandas
-numpy
-scikit-learn
-dvc
-dvc-gs
-mlflow
-feast
-gcsfs
-pyarrow
-matplotlib
-pytest
-joblib
-cml
-pandas
-numpy
-scikit-learn
-joblib
+pandas==2.2.3
+numpy==2.2.6
+scikit-learn==1.6.1
+joblib==1.5.1
 
-dvc
-dvc-gs
+dvc==3.63.0
+dvc-gs==3.0.2
 
-mlflow
-feast
+mlflow==2.22.2
+feast==0.65.0
 
-gcsfs
-pyarrow
+gcsfs==2025.5.1
+pyarrow==19.0.1
 
-matplotlib
-pytest
+matplotlib==3.10.3
+pytest==8.4.1
 
 cml
