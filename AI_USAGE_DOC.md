@@ -4,9 +4,9 @@
 > List all GenAI / LLM tools used during the exam  
 > Provide **public share links** to AI chats or attach conversation files if links are not available  
 
-- Tool Name
-    - Purpose :
-    - Shared Chat Link :
+- ChatGPT
+    - Purpose : debugging
+    - Shared Chat Link : https://chatgpt.com/share/6a6f51da-0bc0-83ee-8e2e-f563772534c4
     - Notes (optional) :
 
 *If a tool does not support link sharing, please specify and paste prompt-response logs in Section 3.*
